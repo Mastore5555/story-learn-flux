@@ -45,10 +45,15 @@ const Header = () => {
           <Link to="/" className="text-foreground hover:text-primary transition-smooth">Início</Link>
           <Link to="/courses" className="text-muted-foreground hover:text-primary transition-smooth">Cursos</Link>
           {user && (
-            <Link to="/favorites" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-smooth">
-              <Heart className="w-4 h-4" />
-              Favoritos
-            </Link>
+            <>
+              <Link to="/favorites" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-smooth">
+                <Heart className="w-4 h-4" />
+                Favoritos
+              </Link>
+              <Link to="/certificates" className="text-muted-foreground hover:text-primary transition-smooth">
+                Certificados
+              </Link>
+            </>
           )}
           <a href="#categorias" className="text-muted-foreground hover:text-primary transition-smooth">Categorias</a>
           <a href="#sobre" className="text-muted-foreground hover:text-primary transition-smooth">Sobre</a>

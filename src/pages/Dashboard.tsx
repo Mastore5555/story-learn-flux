@@ -208,46 +208,16 @@ export default function Dashboard() {
                 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Seus Favoritos</CardTitle>
+                    <CardTitle>Sugestões Personalizadas</CardTitle>
                     <CardDescription>
-                      Cursos salvos para assistir mais tarde
+                      Cursos recomendados pela IA com base no seu perfil
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    {loading ? (
-                      <div className="text-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-                      </div>
-                    ) : stats?.favoritesList?.length > 0 ? (
-                      <div className="space-y-4">
-                        {stats.favoritesList.map((favorite: any) => (
-                          <div key={favorite.id} className="flex items-center space-x-3 p-3 rounded-lg border">
-                            <img 
-                              src={favorite.course?.thumbnail_url || '/placeholder.svg'} 
-                              alt={favorite.course?.title}
-                              className="w-16 h-12 object-cover rounded"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium truncate">{favorite.course?.title}</h4>
-                              <p className="text-sm text-muted-foreground">
-                                {favorite.course?.instructor} • {favorite.course?.category}
-                              </p>
-                            </div>
-                            <Button size="sm" variant="ghost" asChild>
-                              <Link to={`/course/${favorite.course_id}`}>
-                                <Play className="w-4 h-4" />
-                              </Link>
-                            </Button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-8 text-muted-foreground">
-                        <Star className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                        <p>Nenhum curso favorito ainda</p>
-                        <p className="text-sm">Salve cursos para acessá-los rapidamente</p>
-                      </div>
-                    )}
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Star className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>Função será implementada em breve</p>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
