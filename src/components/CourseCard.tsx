@@ -7,6 +7,8 @@ import {
   BookOpen,
   ChevronRight 
 } from "lucide-react";
+import { FavoriteButton } from "./FavoriteButton";
+import { useNavigate } from "react-router-dom";
 
 interface CourseCardProps {
   course: {
@@ -14,23 +16,47 @@ interface CourseCardProps {
     title: string;
     description: string;
     instructor: string;
-    duration: string;
+    duration_minutes?: number;
     level: string;
-    rating: number;
-    students: number;
-    lessons: number;
     category: string;
-    thumbnail: string;
-    price?: string;
+    thumbnail_url?: string;
   };
+  showFavoriteButton?: boolean;
 }
 
-const CourseCard = ({ course }: CourseCardProps) => {
+const CourseCard = ({ course, showFavoriteButton = true }: CourseCardProps) => {
+  const navigate = useNavigate();
+
+  const formatDuration = (minutes?: number) => {
+    if (!minutes) return "A definir";
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    if (hours > 0) {
+      return `${hours}h${mins > 0 ? ` ${mins}m` : ''}`;
+    }
+    return `${mins}m`;
+  };
+
+  const handleClick = () => {
+    navigate(`/course/${course.id}`);
+  };
+
   return (
-    <div className="course-card glass rounded-xl overflow-hidden border border-border/50 group">
+    <div 
+      className="course-card glass rounded-xl overflow-hidden border border-border/50 group cursor-pointer" 
+      onClick={handleClick}
+    >
       {/* Thumbnail */}
       <div className="relative aspect-video bg-gradient-to-br from-primary/20 to-accent/20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10" />
+        {course.thumbnail_url ? (
+          <img 
+            src={course.thumbnail_url} 
+            alt={course.title}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10" />
+        )}
         
         {/* Play Button Overlay */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-smooth">
@@ -52,6 +78,13 @@ const CourseCard = ({ course }: CourseCardProps) => {
             {course.level}
           </span>
         </div>
+
+        {/* Favorite Button */}
+        {showFavoriteButton && (
+          <div className="absolute top-4 right-16">
+            <FavoriteButton courseId={course.id} />
+          </div>
+        )}
       </div>
       
       {/* Content */}
@@ -72,32 +105,28 @@ const CourseCard = ({ course }: CourseCardProps) => {
         <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
           <div className="flex items-center space-x-2">
             <Clock className="w-4 h-4 text-primary" />
-            <span className="text-muted-foreground">{course.duration}</span>
+            <span className="text-muted-foreground">{formatDuration(course.duration_minutes)}</span>
           </div>
           
           <div className="flex items-center space-x-2">
             <BookOpen className="w-4 h-4 text-primary" />
-            <span className="text-muted-foreground">{course.lessons} aulas</span>
+            <span className="text-muted-foreground">Múltiplas aulas</span>
           </div>
           
           <div className="flex items-center space-x-2">
             <Star className="w-4 h-4 text-yellow-500" />
-            <span className="text-muted-foreground">{course.rating}</span>
+            <span className="text-muted-foreground">4.8</span>
           </div>
           
           <div className="flex items-center space-x-2">
             <Users className="w-4 h-4 text-primary" />
-            <span className="text-muted-foreground">{course.students}</span>
+            <span className="text-muted-foreground">1.2k+</span>
           </div>
         </div>
         
         {/* Price and CTA */}
         <div className="flex items-center justify-between">
-          {course.price ? (
-            <div className="text-2xl font-bold text-primary">{course.price}</div>
-          ) : (
-            <div className="text-sm text-accent font-medium">Incluído na assinatura</div>
-          )}
+          <div className="text-sm text-accent font-medium">Incluído na assinatura</div>
           
           <Button variant="ghost" size="sm" className="group/button">
             Ver Curso

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { Search, User, Menu, LogOut } from "lucide-react";
+import { Search, User, Menu, LogOut, Heart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
@@ -32,6 +32,12 @@ const Header = () => {
         <nav className="hidden md:flex items-center space-x-8">
           <Link to="/" className="text-foreground hover:text-primary transition-smooth">Início</Link>
           <Link to="/courses" className="text-muted-foreground hover:text-primary transition-smooth">Cursos</Link>
+          {user && (
+            <Link to="/favorites" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-smooth">
+              <Heart className="w-4 h-4" />
+              Favoritos
+            </Link>
+          )}
           <a href="#categorias" className="text-muted-foreground hover:text-primary transition-smooth">Categorias</a>
           <a href="#sobre" className="text-muted-foreground hover:text-primary transition-smooth">Sobre</a>
         </nav>
