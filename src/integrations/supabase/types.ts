@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      certificates: {
+        Row: {
+          certificate_number: string
+          course_id: string
+          created_at: string
+          id: string
+          issued_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          certificate_number: string
+          course_id: string
+          created_at?: string
+          id?: string
+          issued_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          certificate_number?: string
+          course_id?: string
+          created_at?: string
+          id?: string
+          issued_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       course_progress: {
         Row: {
           completed_at: string | null
@@ -170,7 +200,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_certificate_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never
