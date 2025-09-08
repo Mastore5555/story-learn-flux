@@ -1,8 +1,12 @@
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import { Play, BookOpen, Users, Star } from "lucide-react";
 import heroImage from "@/assets/hero-learning.jpg";
 
 const HeroSection = () => {
+  const { user } = useAuth();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Background Image */}
@@ -65,13 +69,15 @@ const HeroSection = () => {
           
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button variant="hero" size="lg" className="text-lg px-8 py-6">
-              <Play className="w-5 h-5 mr-2" />
-              Começar Gratuitamente
+            <Button variant="hero" size="lg" className="text-lg px-8 py-6" asChild>
+              <Link to={user ? "/courses" : "/auth"}>
+                <Play className="w-5 h-5 mr-2" />
+                {user ? "Explorar Cursos" : "Começar Gratuitamente"}
+              </Link>
             </Button>
             
-            <Button variant="glass" size="lg" className="text-lg px-8 py-6">
-              Ver Demo
+            <Button variant="glass" size="lg" className="text-lg px-8 py-6" asChild>
+              <Link to="/courses">Ver Catálogo</Link>
             </Button>
           </div>
           

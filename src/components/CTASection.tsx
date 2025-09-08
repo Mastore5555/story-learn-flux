@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from "@/components/ui/button";
 import { Check, Star, Zap } from "lucide-react";
 
@@ -11,6 +13,8 @@ const benefits = [
 ];
 
 const CTASection = () => {
+  const { user } = useAuth();
+
   return (
     <section className="py-20 relative overflow-hidden">
       {/* Background Effects */}
@@ -60,8 +64,10 @@ const CTASection = () => {
               ))}
             </ul>
             
-            <Button variant="hero" size="lg" className="w-full text-lg py-6 mb-4">
-              Começar Agora - 7 Dias Grátis
+            <Button variant="hero" size="lg" className="w-full text-lg py-6 mb-4" asChild>
+              <Link to={user ? "/dashboard" : "/auth"}>
+                {user ? "Acessar Dashboard" : "Começar Agora - 7 Dias Grátis"}
+              </Link>
             </Button>
             
             <p className="text-xs text-muted-foreground text-center">

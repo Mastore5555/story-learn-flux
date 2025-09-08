@@ -30,10 +30,10 @@ const Header = () => {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <a href="#" className="text-foreground hover:text-primary transition-smooth">Início</a>
-          <a href="#" className="text-muted-foreground hover:text-primary transition-smooth">Cursos</a>
-          <a href="#" className="text-muted-foreground hover:text-primary transition-smooth">Trilhas</a>
-          <a href="#" className="text-muted-foreground hover:text-primary transition-smooth">Sobre</a>
+          <Link to="/" className="text-foreground hover:text-primary transition-smooth">Início</Link>
+          <Link to="/courses" className="text-muted-foreground hover:text-primary transition-smooth">Cursos</Link>
+          <a href="#categorias" className="text-muted-foreground hover:text-primary transition-smooth">Categorias</a>
+          <a href="#sobre" className="text-muted-foreground hover:text-primary transition-smooth">Sobre</a>
         </nav>
 
         {/* Actions */}
