@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { useProgress, Course } from '@/hooks/useProgress';
 import { supabase } from '@/integrations/supabase/client';
@@ -221,16 +222,18 @@ export default function Courses() {
                     
                     {user ? (
                       <Button 
-                        onClick={() => handleStartCourse(course.id)}
+                        asChild
                         disabled={loading}
                         size="sm"
                       >
-                        <Play className="w-4 h-4 mr-2" />
-                        {hasStarted ? 'Continuar' : 'Iniciar'}
+                        <Link to={`/course/${course.id}`}>
+                          <Play className="w-4 h-4 mr-2" />
+                          {hasStarted ? 'Continuar' : 'Assistir'}
+                        </Link>
                       </Button>
                     ) : (
-                      <Button size="sm" variant="outline">
-                        Fazer Login
+                      <Button size="sm" variant="outline" asChild>
+                        <Link to="/auth">Fazer Login</Link>
                       </Button>
                     )}
                   </div>

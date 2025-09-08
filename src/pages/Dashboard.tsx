@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProgressCard } from '@/components/ProgressCard';
 import { Brain, User, BookOpen, Award, Settings, LogOut, Play, Clock, Star, TrendingUp } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
@@ -185,8 +186,10 @@ export default function Dashboard() {
                                 </span>
                               </div>
                             </div>
-                            <Button size="sm" variant="ghost">
-                              <Play className="w-4 h-4" />
+                            <Button size="sm" variant="ghost" asChild>
+                              <Link to={`/course/${progress.course_id}`}>
+                                <Play className="w-4 h-4" />
+                              </Link>
                             </Button>
                           </div>
                         ))}
@@ -195,8 +198,8 @@ export default function Dashboard() {
                       <div className="text-center py-8 text-muted-foreground">
                         <Play className="w-12 h-12 mx-auto mb-4 opacity-50" />
                         <p>Nenhum curso em progresso</p>
-                        <Button className="mt-4" variant="outline">
-                          Explorar Cursos
+                        <Button className="mt-4" variant="outline" asChild>
+                          <Link to="/courses">Explorar Cursos</Link>
                         </Button>
                       </div>
                     )}
@@ -230,8 +233,10 @@ export default function Dashboard() {
                                 {favorite.course?.instructor} • {favorite.course?.category}
                               </p>
                             </div>
-                            <Button size="sm" variant="ghost">
-                              <Play className="w-4 h-4" />
+                            <Button size="sm" variant="ghost" asChild>
+                              <Link to={`/course/${favorite.course_id}`}>
+                                <Play className="w-4 h-4" />
+                              </Link>
                             </Button>
                           </div>
                         ))}

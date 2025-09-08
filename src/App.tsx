@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import Courses from "./pages/Courses";
+import CoursePlayer from "./pages/CoursePlayer";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/course/:courseId" element={<CoursePlayer />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
