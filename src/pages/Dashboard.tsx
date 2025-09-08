@@ -1,13 +1,32 @@
 import { useAuth } from '@/hooks/useAuth';
+import { useProgress } from '@/hooks/useProgress';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Brain, User, BookOpen, Award, Settings, LogOut, Play, Clock, Star } from 'lucide-react';
+import { ProgressCard } from '@/components/ProgressCard';
+import { Brain, User, BookOpen, Award, Settings, LogOut, Play, Clock, Star, TrendingUp } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
+  const { getUserStats } = useProgress();
+  const [stats, setStats] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadStats = async () => {
+      setLoading(true);
+      const userStats = await getUserStats();
+      setStats(userStats);
+      setLoading(false);
+    };
+
+    if (user) {
+      loadStats();
+    }
+  }, [user, getUserStats]);
 
   const getInitials = (name: string) => {
     return name
@@ -55,7 +74,10 @@ export default function Dashboard() {
               Olá, {user?.user_metadata?.display_name || 'Estudante'}! 👋
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Bem-vindo à sua área pessoal da Techflix Academy. Continue sua jornada de aprendizado!
+              {stats?.activeCourses > 0 
+                ? `Continue seus ${stats.activeCourses} cursos em progresso`
+                : 'Bem-vindo à sua área pessoal da Techflix Academy. Continue sua jornada de aprendizado!'
+              }
             </p>
           </div>
 
@@ -66,7 +88,9 @@ export default function Dashboard() {
                 <div className="flex items-center space-x-2">
                   <BookOpen className="w-5 h-5 text-primary" />
                   <div>
-                    <p className="text-2xl font-bold">0</p>
+                    <p className="text-2xl font-bold">
+                      {loading ? "..." : stats?.activeCourses || 0}
+                    </p>
                     <p className="text-sm text-muted-foreground">Cursos Ativos</p>
                   </div>
                 </div>
@@ -78,7 +102,9 @@ export default function Dashboard() {
                 <div className="flex items-center space-x-2">
                   <Clock className="w-5 h-5 text-accent" />
                   <div>
-                    <p className="text-2xl font-bold">0h</p>
+                    <p className="text-2xl font-bold">
+                      {loading ? "..." : `${Math.floor((stats?.totalWatchTime || 0) / 60)}h`}
+                    </p>
                     <p className="text-sm text-muted-foreground">Tempo Estudado</p>
                   </div>
                 </div>
@@ -90,8 +116,10 @@ export default function Dashboard() {
                 <div className="flex items-center space-x-2">
                   <Award className="w-5 h-5 text-yellow-500" />
                   <div>
-                    <p className="text-2xl font-bold">0</p>
-                    <p className="text-sm text-muted-foreground">Certificados</p>
+                    <p className="text-2xl font-bold">
+                      {loading ? "..." : stats?.completedCourses || 0}
+                    </p>
+                    <p className="text-sm text-muted-foreground">Concluídos</p>
                   </div>
                 </div>
               </CardContent>
@@ -102,7 +130,9 @@ export default function Dashboard() {
                 <div className="flex items-center space-x-2">
                   <Star className="w-5 h-5 text-orange-500" />
                   <div>
-                    <p className="text-2xl font-bold">0</p>
+                    <p className="text-2xl font-bold">
+                      {loading ? "..." : stats?.favorites || 0}
+                    </p>
                     <p className="text-sm text-muted-foreground">Favoritos</p>
                   </div>
                 </div>
@@ -128,28 +158,91 @@ export default function Dashboard() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Play className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                      <p>Nenhum curso em progresso</p>
-                      <Button className="mt-4" variant="outline">
-                        Explorar Cursos
-                      </Button>
-                    </div>
+                    {loading ? (
+                      <div className="text-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                      </div>
+                    ) : stats?.recentProgress?.length > 0 ? (
+                      <div className="space-y-4">
+                        {stats.recentProgress.slice(0, 2).map((progress: any) => (
+                          <div key={progress.id} className="flex items-center space-x-3 p-3 rounded-lg border">
+                            <img 
+                              src={progress.course?.thumbnail_url || '/placeholder.svg'} 
+                              alt={progress.course?.title}
+                              className="w-16 h-12 object-cover rounded"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium truncate">{progress.course?.title}</h4>
+                              <div className="flex items-center mt-1">
+                                <div className="flex-1 bg-secondary rounded-full h-2 mr-2">
+                                  <div 
+                                    className="bg-primary h-2 rounded-full" 
+                                    style={{ width: `${progress.progress_percentage}%` }}
+                                  />
+                                </div>
+                                <span className="text-sm text-muted-foreground">
+                                  {progress.progress_percentage}%
+                                </span>
+                              </div>
+                            </div>
+                            <Button size="sm" variant="ghost">
+                              <Play className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Play className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>Nenhum curso em progresso</p>
+                        <Button className="mt-4" variant="outline">
+                          Explorar Cursos
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
                 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Recomendado para Você</CardTitle>
+                    <CardTitle>Seus Favoritos</CardTitle>
                     <CardDescription>
-                      Cursos selecionados baseados no seu perfil
+                      Cursos salvos para assistir mais tarde
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-center py-8 text-muted-foreground">
-                      <BookOpen className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                      <p>Complete seu perfil para receber recomendações</p>
-                    </div>
+                    {loading ? (
+                      <div className="text-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+                      </div>
+                    ) : stats?.favoritesList?.length > 0 ? (
+                      <div className="space-y-4">
+                        {stats.favoritesList.map((favorite: any) => (
+                          <div key={favorite.id} className="flex items-center space-x-3 p-3 rounded-lg border">
+                            <img 
+                              src={favorite.course?.thumbnail_url || '/placeholder.svg'} 
+                              alt={favorite.course?.title}
+                              className="w-16 h-12 object-cover rounded"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium truncate">{favorite.course?.title}</h4>
+                              <p className="text-sm text-muted-foreground">
+                                {favorite.course?.instructor} • {favorite.course?.category}
+                              </p>
+                            </div>
+                            <Button size="sm" variant="ghost">
+                              <Play className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Star className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>Nenhum curso favorito ainda</p>
+                        <p className="text-sm">Salve cursos para acessá-los rapidamente</p>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </div>
