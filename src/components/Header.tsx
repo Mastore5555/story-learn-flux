@@ -3,10 +3,13 @@ import { useAuth } from "@/hooks/useAuth";
 import { Search, User, Menu, LogOut, Heart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Header = () => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const getInitials = (name: string) => {
     return name
@@ -15,6 +18,15 @@ const Header = () => {
       .join('')
       .toUpperCase()
       .slice(0, 2);
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/courses?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate('/courses');
+    }
   };
 
   return (
@@ -44,14 +56,18 @@ const Header = () => {
 
         {/* Actions */}
         <div className="flex items-center space-x-4">
-          <div className="hidden md:flex items-center space-x-2 glass rounded-lg px-3 py-2 border border-border/50">
-            <Search className="w-4 h-4 text-muted-foreground" />
-            <input 
-              type="text" 
-              placeholder="Buscar cursos..." 
-              className="bg-transparent text-sm border-none outline-none placeholder:text-muted-foreground w-32"
-            />
-          </div>
+          <form onSubmit={handleSearch} className="hidden md:flex">
+            <div className="flex items-center space-x-2 glass rounded-lg px-3 py-2 border border-border/50">
+              <Search className="w-4 h-4 text-muted-foreground" />
+              <input 
+                type="text" 
+                placeholder="Buscar cursos..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent text-sm border-none outline-none placeholder:text-muted-foreground w-32"
+              />
+            </div>
+          </form>
           
           {user ? (
             <DropdownMenu>
