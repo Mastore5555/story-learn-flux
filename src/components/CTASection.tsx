@@ -38,7 +38,7 @@ const CTASection = () => {
           </h2>
           
           <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Junte-se a milhares de profissionais que já transformaram suas carreiras com a Story Academy
+            Junte-se a milhares de profissionais que já transformaram suas carreiras com a Techflix Academy
           </p>
           
           {/* Pricing Card */}

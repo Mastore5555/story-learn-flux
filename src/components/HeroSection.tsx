@@ -9,7 +9,7 @@ const HeroSection = () => {
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage} 
-          alt="Story Academy Learning Platform" 
+          alt="Techflix Academy Learning Platform" 
           className="w-full h-full object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/60 to-background/80" />

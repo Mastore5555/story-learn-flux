@@ -11,7 +11,7 @@ const Footer = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              <span className="gradient-text text-xl font-bold">Story Academy</span>
+              <span className="gradient-text text-xl font-bold">Techflix Academy</span>
             </div>
             <p className="text-muted-foreground mb-6 max-w-md">
               A plataforma de aprendizado que está revolucionando a educação tech no Brasil. 
@@ -88,7 +88,7 @@ const Footer = () => {
         
         {/* Copyright */}
         <div className="border-t border-border/20 pt-8 mt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 Story Academy. Todos os direitos reservados.</p>
+          <p>&copy; 2024 Techflix Academy. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

@@ -8,9 +8,9 @@ const Header = () => {
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">S</span>
+            <span className="text-white font-bold text-lg">T</span>
           </div>
-          <span className="gradient-text text-xl font-bold">Story Academy</span>
+          <span className="gradient-text text-xl font-bold">Techflix Academy</span>
         </div>
 
         {/* Navigation */}
