@@ -266,6 +266,28 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Blog Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">
+              Blog da <span className="text-primary">Techflix</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Artigos, tutoriais e insights sobre tecnologia e desenvolvimento profissional
+            </p>
+          </div>
+          
+          <div className="flex justify-center">
+            <Link to="/blog">
+              <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:scale-105 transition-smooth">
+                Visitar Blog
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       <CTASection />
       <Footer />
     </div>

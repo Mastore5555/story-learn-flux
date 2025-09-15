@@ -12,6 +12,8 @@ import Courses from "./pages/Courses";
 import CoursePlayer from "./pages/CoursePlayer";
 import Favorites from "./pages/Favorites";
 import Certificates from "./pages/Certificates";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +28,8 @@ const App = () => (
           <Routes>
             <Route path="/course/:courseId" element={<CoursePlayer />} />
             <Route path="/courses" element={<Courses />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/favorites" element={
               <ProtectedRoute>
                 <Favorites />

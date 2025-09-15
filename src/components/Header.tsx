@@ -44,6 +44,7 @@ const Header = () => {
         <nav className="hidden md:flex items-center space-x-8">
           <Link to="/" className="text-foreground hover:text-primary transition-smooth">Início</Link>
           <Link to="/courses" className="text-muted-foreground hover:text-primary transition-smooth">Cursos</Link>
+          <Link to="/blog" className="text-muted-foreground hover:text-primary transition-smooth">Blog</Link>
           {user && (
             <>
               <Link to="/favorites" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-smooth">
