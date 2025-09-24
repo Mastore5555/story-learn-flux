@@ -4,46 +4,44 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CourseCard from '@/components/CourseCard';
 import { SearchFiltersComponent } from '@/components/SearchFilters';
+import SmartSearchBox from '@/components/SmartSearchBox';
 import { useSearch } from '@/hooks/useSearch';
-import { Input } from '@/components/ui/input';
-import { Search, BookOpen } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const Courses = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { courses, loading, searchQuery, filters, updateSearch, updateFilters, getAllCourses } = useSearch();
-  const [localSearch, setLocalSearch] = useState('');
+  const [smartResults, setSmartResults] = useState<any[]>([]);
+  const [isUsingSmartSearch, setIsUsingSmartSearch] = useState(false);
 
   // Sincroniza com URL params
   useEffect(() => {
     const urlSearch = searchParams.get('search');
     if (urlSearch) {
-      setLocalSearch(urlSearch);
       updateSearch(urlSearch);
     } else {
       getAllCourses();
     }
   }, []);
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmedSearch = localSearch.trim();
-    
-    if (trimmedSearch) {
-      setSearchParams({ search: trimmedSearch });
-      updateSearch(trimmedSearch);
-    } else {
-      setSearchParams({});
-      getAllCourses();
-    }
+  const handleSmartSearch = (query: string, results: any[]) => {
+    setSearchParams({ search: query });
+    setSmartResults(results);
+    setIsUsingSmartSearch(true);
+    updateSearch(query);
   };
 
   const handleClearFilters = () => {
     updateFilters({});
     setSearchParams({});
-    setLocalSearch('');
+    setSmartResults([]);
+    setIsUsingSmartSearch(false);
     getAllCourses();
   };
+
+  // Use smart search results if available, otherwise use regular search
+  const displayCourses = isUsingSmartSearch ? smartResults : courses;
 
   return (
     <div className="min-h-screen bg-background">
@@ -60,19 +58,11 @@ const Courses = () => {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="max-w-2xl mx-auto mb-8">
-          <form onSubmit={handleSearchSubmit} className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="text"
-              placeholder="Busque por título, instrutor ou palavra-chave..."
-              value={localSearch}
-              onChange={(e) => setLocalSearch(e.target.value)}
-              className="pl-10 pr-4 py-3 text-lg"
-            />
-          </form>
-        </div>
+        {/* Smart Search Bar */}
+        <SmartSearchBox 
+          onSearch={handleSmartSearch}
+          className="mb-8"
+        />
 
         {/* Filters */}
         <SearchFiltersComponent 
@@ -87,9 +77,14 @@ const Courses = () => {
             {loading ? (
               "Buscando..."
             ) : searchQuery ? (
-              `${courses.length} resultado(s) para "${searchQuery}"`
+              <>
+                {`${displayCourses.length} resultado(s) para "${searchQuery}"`}
+                {isUsingSmartSearch && (
+                  <span className="ml-2 text-primary font-medium">✨ Busca inteligente</span>
+                )}
+              </>
             ) : (
-              `${courses.length} curso(s) disponível(is)`
+              `${displayCourses.length} curso(s) disponível(is)`
             )}
           </div>
         </div>
@@ -99,7 +94,7 @@ const Courses = () => {
           <div className="flex items-center justify-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
           </div>
-        ) : courses.length === 0 ? (
+        ) : displayCourses.length === 0 ? (
           /* No Results */
           <Card className="max-w-md mx-auto">
             <CardContent className="p-8 text-center">
@@ -126,7 +121,7 @@ const Courses = () => {
         ) : (
           /* Courses Grid */
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {courses.map((course) => (
+            {displayCourses.map((course) => (
               <CourseCard
                 key={course.id}
                 course={course}
