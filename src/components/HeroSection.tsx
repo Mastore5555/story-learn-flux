@@ -23,9 +23,9 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 z-10 text-center">
         <div className="max-w-4xl mx-auto animate-slide-up">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            O <span className="gradient-text">Netflix</span> dos
+            A <span className="gradient-text">Streaming</span> dos
             <br />
-            <span className="gradient-text">Cursos Tech</span>
+            <span className="gradient-text">Cursos Profissionais</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
