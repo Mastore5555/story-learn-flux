@@ -1,18 +1,23 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useProgress } from '@/hooks/useProgress';
+import { useAnalytics } from '@/hooks/useAnalytics';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProgressCard } from '@/components/ProgressCard';
-import { Brain, User, BookOpen, Award, Settings, LogOut, Play, Clock, Star, TrendingUp } from 'lucide-react';
+import { AnalyticsChart } from '@/components/analytics/AnalyticsChart';
+import { AchievementBadge } from '@/components/analytics/AchievementBadge';
+import { InsightsCard } from '@/components/analytics/InsightsCard';
+import { Brain, User, BookOpen, Award, Settings, LogOut, Play, Clock, Star, TrendingUp, BarChart3 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const { getUserStats } = useProgress();
+  const { analytics, loading: analyticsLoading, refetch: refetchAnalytics } = useAnalytics();
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -145,6 +150,8 @@ export default function Dashboard() {
           <Tabs defaultValue="overview" className="space-y-4">
             <TabsList>
               <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+              <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              <TabsTrigger value="achievements">Conquistas</TabsTrigger>
               <TabsTrigger value="courses">Meus Cursos</TabsTrigger>
               <TabsTrigger value="profile">Meu Perfil</TabsTrigger>
             </TabsList>
@@ -221,6 +228,91 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+
+            <TabsContent value="analytics" className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-2">
+                <AnalyticsChart
+                  title="Progresso Semanal"
+                  description="Seu progresso de estudo nos últimos 7 dias"
+                  data={analytics?.weeklyProgress || []}
+                  type="line"
+                  dataKey="progress"
+                  xAxisKey="name"
+                  color="hsl(var(--primary))"
+                />
+                
+                <AnalyticsChart
+                  title="Tempo de Estudo"
+                  description="Minutos estudados por dia"
+                  data={analytics?.weeklyProgress || []}
+                  type="bar"
+                  dataKey="time"
+                  xAxisKey="name"
+                  color="hsl(var(--accent))"
+                />
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-3">
+                <AnalyticsChart
+                  title="Categorias Favoritas"
+                  description="Distribuição por área de conhecimento"
+                  data={analytics?.categoryBreakdown || []}
+                  type="pie"
+                  dataKey="value"
+                />
+                
+                <div className="md:col-span-2">
+                  <InsightsCard
+                    insights={analytics?.insights || []}
+                    studyStreak={analytics?.studyStreak || 0}
+                    onRefresh={refetchAnalytics}
+                    loading={analyticsLoading}
+                  />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="achievements" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Award className="w-5 h-5 text-yellow-500" />
+                    <CardTitle>Suas Conquistas</CardTitle>
+                  </div>
+                  <CardDescription>
+                    Desbloqueie conquistas conforme você avança nos estudos
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {analytics?.achievements.map((achievement) => (
+                      <AchievementBadge
+                        key={achievement.id}
+                        achievement={achievement}
+                        size="md"
+                      />
+                    ))}
+                  </div>
+                  
+                  <div className="mt-6 p-4 bg-primary/5 rounded-lg border">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-semibold">Progresso Total</h4>
+                        <p className="text-sm text-muted-foreground">
+                          {analytics?.achievements.filter(a => a.unlocked).length || 0} de {analytics?.achievements.length || 0} conquistas desbloqueadas
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-primary">
+                          {Math.round(((analytics?.achievements.filter(a => a.unlocked).length || 0) / (analytics?.achievements.length || 1)) * 100)}%
+                        </div>
+                        <p className="text-xs text-muted-foreground">Completo</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
             
             <TabsContent value="courses" className="space-y-4">
