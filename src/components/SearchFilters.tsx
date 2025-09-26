@@ -67,14 +67,13 @@ export const SearchFiltersComponent = ({ filters, onFiltersChange, onClearFilter
         <div>
           <label className="text-sm font-medium mb-2 block">Categoria</label>
           <Select 
-            value={filters.category || ''} 
+            value={filters.category || undefined} 
             onValueChange={(value) => updateFilter('category', value || undefined)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Todas as categorias" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todas as categorias</SelectItem>
               {categories.map((category) => (
                 <SelectItem key={category} value={category}>
                   {category}
@@ -88,14 +87,13 @@ export const SearchFiltersComponent = ({ filters, onFiltersChange, onClearFilter
         <div>
           <label className="text-sm font-medium mb-2 block">Nível</label>
           <Select 
-            value={filters.level || ''} 
+            value={filters.level || undefined} 
             onValueChange={(value) => updateFilter('level', value || undefined)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Todos os níveis" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os níveis</SelectItem>
               {levels.map((level) => (
                 <SelectItem key={level.value} value={level.value}>
                   {level.label}
@@ -109,14 +107,13 @@ export const SearchFiltersComponent = ({ filters, onFiltersChange, onClearFilter
         <div>
           <label className="text-sm font-medium mb-2 block">Duração</label>
           <Select 
-            value={filters.duration || ''} 
+            value={filters.duration || undefined} 
             onValueChange={(value) => updateFilter('duration', value || undefined)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Qualquer duração" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Qualquer duração</SelectItem>
               {durations.map((duration) => (
                 <SelectItem key={duration.value} value={duration.value}>
                   {duration.label}
@@ -130,14 +127,13 @@ export const SearchFiltersComponent = ({ filters, onFiltersChange, onClearFilter
         <div>
           <label className="text-sm font-medium mb-2 block">Instrutor</label>
           <Select 
-            value={filters.instructor || ''} 
+            value={filters.instructor || undefined} 
             onValueChange={(value) => updateFilter('instructor', value || undefined)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Todos os instrutores" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Todos os instrutores</SelectItem>
               <SelectItem value="Carlos Silva">Carlos Silva</SelectItem>
               <SelectItem value="Ana Costa">Ana Costa</SelectItem>
               <SelectItem value="Pedro Santos">Pedro Santos</SelectItem>
